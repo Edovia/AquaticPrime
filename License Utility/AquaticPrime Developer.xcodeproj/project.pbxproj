@@ -486,6 +486,7 @@
 		3D9363D708565C58006F1864 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				SDKROOT = macosx;
 			};
 			name = Development;
@@ -493,8 +494,7 @@
 		3D9363D808565C58006F1864 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				SDKROOT = macosx;
 			};
 			name = Deployment;
@@ -502,8 +502,7 @@
 		3D9363D908565C58006F1864 /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				SDKROOT = macosx;
 			};
 			name = Default;

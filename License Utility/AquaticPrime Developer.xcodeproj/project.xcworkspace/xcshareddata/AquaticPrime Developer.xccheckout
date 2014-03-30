@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9B1CD606-311B-4C95-83A9-514DEBD42E5F</string>
+	<key>IDESourceControlProjectName</key>
+	<string>AquaticPrime Developer</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>7F377CAD-1518-4D14-91DD-7E4ABD26C953</key>
+		<string>https://github.com/bdrister/AquaticPrime.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>License Utility/AquaticPrime Developer.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>7F377CAD-1518-4D14-91DD-7E4ABD26C953</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/bdrister/AquaticPrime.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>7F377CAD-1518-4D14-91DD-7E4ABD26C953</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7F377CAD-1518-4D14-91DD-7E4ABD26C953</string>
+			<key>IDESourceControlWCCName</key>
+			<string>AquaticPrime</string>
+		</dict>
+	</array>
+</dict>
+</plist>
