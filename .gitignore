@@ -6,3 +6,7 @@ node_modules
 Source/NodeJS/dist
 License Utility/AquaticPrime Developer.xcodeproj/xcuserdata/lucvandal.xcuserdatad/xcschemes/AquaticPrimeDeveloper.xcscheme
 License Utility/AquaticPrime Developer.xcodeproj/xcuserdata/lucvandal.xcuserdatad/xcschemes/xcschememanagement.plist
+Source/Cocoa/AquaticPrime.xcodeproj/project.xcworkspace/xcuserdata/lucvandal.xcuserdatad/WorkspaceSettings.xcsettings
+Source/Cocoa/AquaticPrime.xcodeproj/xcuserdata/lucvandal.xcuserdatad/xcschemes/AquaticPrime.xcscheme
+Source/Cocoa/AquaticPrime.xcodeproj/xcuserdata/lucvandal.xcuserdatad/xcschemes/libAquaticPrime.xcscheme
+Source/Cocoa/AquaticPrime.xcodeproj/xcuserdata/lucvandal.xcuserdatad/xcschemes/xcschememanagement.plist
