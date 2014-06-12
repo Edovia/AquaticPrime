@@ -216,16 +216,17 @@
 	
 	// Create the license dictionary
 	NSMutableDictionary *licenseDict = [NSMutableDictionary dictionaryWithDictionary:dict];
-	[licenseDict setObject:[NSData dataWithBytesNoCopy:signature length:bytes]  forKey:@"Signature"];
+	[licenseDict setObject:[NSData dataWithBytesNoCopy:signature length:bytes] forKey:@"Signature"];
 	
 	// Create the data from the dictionary
-	NSString *error = nil;
-	NSData *licenseFile = [NSPropertyListSerialization dataFromPropertyList:licenseDict 
-																	 format:kCFPropertyListXMLFormat_v1_0 
-														   errorDescription:&error];
+	NSError *error = nil;
+	NSData *licenseFile = [NSPropertyListSerialization dataWithPropertyList:licenseDict
+                                                                     format:NSPropertyListXMLFormat_v1_0
+                                                                    options:0
+                                                                      error:&error];
 	
 	if (!licenseFile) {
-		[self _setError:error];
+		[self _setError:error.localizedDescription];
 		return nil;
 	}
 	
@@ -253,8 +254,11 @@
 
 	// Create a dictionary from the data
 	NSPropertyListFormat format;
-	NSString *error;
-	NSMutableDictionary *licenseDict = [NSPropertyListSerialization propertyListFromData:data mutabilityOption:NSPropertyListMutableContainersAndLeaves format:&format errorDescription:&error];
+	NSError *error;
+    NSMutableDictionary *licenseDict = [NSPropertyListSerialization propertyListWithData:data
+                                                                                 options:NSPropertyListMutableContainersAndLeaves
+                                                                                  format:&format
+                                                                                   error:&error];
 	if (![licenseDict isKindOfClass:[NSMutableDictionary class]] || error)
 		return nil;
 		
@@ -264,7 +268,7 @@
 	
 	// Decrypt the signature - should get 20 bytes back
 	unsigned char checkDigest[20];
-	if (RSA_public_decrypt([signature length], [signature bytes], checkDigest, rsaKey, RSA_PKCS1_PADDING) != 20)
+	if (RSA_public_decrypt((int)[signature length], [signature bytes], checkDigest, rsaKey, RSA_PKCS1_PADDING) != 20)
 		return nil;
 	
 	// Make sure the license hash isn't on the blacklist
