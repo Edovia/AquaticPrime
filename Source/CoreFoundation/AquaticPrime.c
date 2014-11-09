@@ -246,7 +246,7 @@ CFDataRef APCreateHashFromDictionary(CFDictionaryRef dict)
     
     // Build the data
     CFMutableDataRef dictData = CFDataCreateMutable(kCFAllocatorDefault, 0);
-    int keyCount = CFArrayGetCount(keyArray);
+    CFIndex keyCount = CFArrayGetCount(keyArray);
     for (int keyIndex = 0; keyIndex < keyCount; keyIndex++)
     {
         CFStringRef key = CFArrayGetValueAtIndex(keyArray, keyIndex);
