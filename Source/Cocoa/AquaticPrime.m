@@ -28,17 +28,17 @@
 
 @implementation AquaticPrime
 
-- (id)init
+- (instancetype)init
 {
 	return [self initWithKey:nil privateKey:nil];
 }
 
-- (id)initWithKey:(NSString *)key
+- (instancetype)initWithKey:(NSString *)key
 {	
 	return [self initWithKey:key privateKey:nil];
 }
 
-- (id)initWithKey:(NSString *)key privateKey:(NSString *)privateKey
+- (instancetype)initWithKey:(NSString *)key privateKey:(NSString *)privateKey
 {
 	ERR_load_crypto_strings();
 	
@@ -63,12 +63,12 @@
 		RSA_free(rsaKey);
 }
 
-+ (id)aquaticPrimeWithKey:(NSString *)key privateKey:(NSString *)privateKey
++ (instancetype)aquaticPrimeWithKey:(NSString *)key privateKey:(NSString *)privateKey
 {
 	return [[AquaticPrime alloc] initWithKey:key privateKey:privateKey];
 }
 
-+ (id)aquaticPrimeWithKey:(NSString *)key
++ (instancetype)aquaticPrimeWithKey:(NSString *)key
 {
 	return [[AquaticPrime alloc] initWithKey:key privateKey:nil];
 }
@@ -96,25 +96,25 @@
 	
 	// Determine if we have hex or decimal values
 	int result;
-	if ([[key lowercaseString] hasPrefix:@"0x"])
-		result = BN_hex2bn(&rsaKey->n, (const char *)[[key substringFromIndex:2] UTF8String]);
+	if ([key.lowercaseString hasPrefix:@"0x"])
+		result = BN_hex2bn(&rsaKey->n, (const char *)[key substringFromIndex:2].UTF8String);
 	else
-		result = BN_dec2bn(&rsaKey->n, (const char *)[key UTF8String]);
+		result = BN_dec2bn(&rsaKey->n, (const char *)key.UTF8String);
 		
 	if (!result) {
-		[self _setError:[NSString stringWithUTF8String:(char*)ERR_error_string(ERR_get_error(), NULL)]];
+		[self _setError:@((char*)ERR_error_string(ERR_get_error(), NULL))];
 		return NO;
 	}
 	
 	// Do the private portion if it exists
 	if (privateKey && ![privateKey isEqualToString:@""]) {
-		if ([[privateKey lowercaseString] hasPrefix:@"0x"])
-			result = BN_hex2bn(&rsaKey->d, (const char *)[[privateKey substringFromIndex:2] UTF8String]);
+		if ([privateKey.lowercaseString hasPrefix:@"0x"])
+			result = BN_hex2bn(&rsaKey->d, (const char *)[privateKey substringFromIndex:2].UTF8String);
 		else
-			result = BN_dec2bn(&rsaKey->d, (const char *)[privateKey UTF8String]);
+			result = BN_dec2bn(&rsaKey->d, (const char *)privateKey.UTF8String);
 			
 		if (!result) {
-			[self _setError:[NSString stringWithUTF8String:(char*)ERR_error_string(ERR_get_error(), NULL)]];
+			[self _setError:@((char*)ERR_error_string(ERR_get_error(), NULL))];
 			return NO;
 		}
 	}
@@ -129,7 +129,7 @@
 	
 	char *cString = BN_bn2hex(rsaKey->n);
 	
-	NSString *nString = [[NSString alloc] initWithUTF8String:cString];
+	NSString *nString = @(cString);
 	OPENSSL_free(cString);
 	
 	return nString;
@@ -142,7 +142,7 @@
 	
 	char *cString = BN_bn2hex(rsaKey->d);
 	
-	NSString *dString = [[NSString alloc] initWithUTF8String:cString];
+	NSString *dString = @(cString);
 	OPENSSL_free(cString);
 	
 	return dString;
@@ -177,24 +177,24 @@
 	}
 	
 	// Grab all values from the dictionary
-	NSMutableArray *keyArray = [NSMutableArray arrayWithArray:[dict allKeys]];
+	NSMutableArray *keyArray = [NSMutableArray arrayWithArray:dict.allKeys];
 	NSMutableData *dictData = [NSMutableData data];
 	
 	// Sort the keys so we always have a uniform order
 	[keyArray sortUsingSelector:@selector(caseInsensitiveCompare:)];
 	
 	NSUInteger i;
-	for (i = 0; i < [keyArray count]; i++)
+	for (i = 0; i < keyArray.count; i++)
 	{
-		id curValue = [dict objectForKey:[keyArray objectAtIndex:i]];
-		char *desc = (char *)[[curValue description] UTF8String];
+		id curValue = dict[keyArray[i]];
+		char *desc = (char *)[curValue description].UTF8String;
 		// We use strlen instead of [string length] so we can get all the bytes of accented characters
 		[dictData appendBytes:desc length:strlen(desc)];
 	}
 	
 	// Hash the data
 	unsigned char digest[20];
-	SHA1([dictData bytes], [dictData length], digest);
+	SHA1(dictData.bytes, dictData.length, digest);
 	
 	// Create the signature from 20 byte hash
 	int rsaLength = RSA_size(rsaKey);
@@ -208,7 +208,7 @@
 	int bytes = RSA_private_encrypt(20, digest, signature, rsaKey, RSA_PKCS1_PADDING);
 	
 	if (bytes < 0) {
-		[self _setError:[NSString stringWithUTF8String:(char*)ERR_error_string(ERR_get_error(), NULL)]];
+		[self _setError:@((char*)ERR_error_string(ERR_get_error(), NULL))];
 		if (signature)
 			free(signature);
 		return nil;
@@ -216,7 +216,7 @@
 	
 	// Create the license dictionary
 	NSMutableDictionary *licenseDict = [NSMutableDictionary dictionaryWithDictionary:dict];
-	[licenseDict setObject:[NSData dataWithBytesNoCopy:signature length:bytes] forKey:@"Signature"];
+	licenseDict[@"Signature"] = [NSData dataWithBytesNoCopy:signature length:bytes];
 	
 	// Create the data from the dictionary
 	NSError *error = nil;
@@ -262,13 +262,13 @@
 	if (![licenseDict isKindOfClass:[NSMutableDictionary class]] || error)
 		return nil;
 		
-	NSData *signature = [licenseDict objectForKey:@"Signature"];
+	NSData *signature = licenseDict[@"Signature"];
 	if (!signature)
 		return nil;
 	
 	// Decrypt the signature - should get 20 bytes back
 	unsigned char checkDigest[20];
-	if (RSA_public_decrypt((int)[signature length], [signature bytes], checkDigest, rsaKey, RSA_PKCS1_PADDING) != 20)
+	if (RSA_public_decrypt((int)signature.length, signature.bytes, checkDigest, rsaKey, RSA_PKCS1_PADDING) != 20)
 		return nil;
 	
 	// Make sure the license hash isn't on the blacklist
@@ -287,24 +287,24 @@
 	[licenseDict removeObjectForKey:@"Signature"];
 	
 	// Grab all values from the dictionary
-	NSMutableArray *keyArray = [NSMutableArray arrayWithArray:[licenseDict allKeys]];
+	NSMutableArray *keyArray = [NSMutableArray arrayWithArray:licenseDict.allKeys];
 	NSMutableData *dictData = [NSMutableData data];
 	
 	// Sort the keys so we always have a uniform order
 	[keyArray sortUsingSelector:@selector(caseInsensitiveCompare:)];
 	
 	NSUInteger objectIndex;
-	for (objectIndex = 0; objectIndex < [keyArray count]; objectIndex++)
+	for (objectIndex = 0; objectIndex < keyArray.count; objectIndex++)
 	{
-		id currentValue = [licenseDict objectForKey:[keyArray objectAtIndex:objectIndex]];
-		char *description = (char *)[[currentValue description] UTF8String];
+		id currentValue = licenseDict[keyArray[objectIndex]];
+		char *description = (char *)[currentValue description].UTF8String;
 		// We use strlen instead of [string length] so we can get all the bytes of accented characters
 		[dictData appendBytes:description length:strlen(description)];
 	}
 	
 	// Hash the data
 	unsigned char digest[20];
-	SHA1([dictData bytes], [dictData length], digest);
+	SHA1(dictData.bytes, dictData.length, digest);
 	
 	// Check if the signature is a match	
 	int checkIndex;

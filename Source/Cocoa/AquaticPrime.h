@@ -38,18 +38,17 @@
 }
 
 // Creation
-+ (id)aquaticPrimeWithKey:(NSString *)key;
-+ (id)aquaticPrimeWithKey:(NSString *)key privateKey:(NSString *)privateKey;
-- (id)initWithKey:(NSString *)key;
-- (id)initWithKey:(NSString *)key privateKey:(NSString *)privateKey;
++ (instancetype)aquaticPrimeWithKey:(NSString *)key;
++ (instancetype)aquaticPrimeWithKey:(NSString *)key privateKey:(NSString *)privateKey;
+- (instancetype)initWithKey:(NSString *)key;
+- (instancetype)initWithKey:(NSString *)key privateKey:(NSString *)privateKey NS_DESIGNATED_INITIALIZER;
 
 // Getters & Setters
 - (BOOL)setKey:(NSString *)key;
 - (BOOL)setKey:(NSString *)key privateKey:(NSString *)privateKey;
 - (NSString *)key;
-- (NSString *)privateKey;
-- (void)setHash:(NSString *)newHash;
-- (NSString *)hash;
+@property (NS_NONATOMIC_IOSONLY, readonly, copy) NSString *privateKey;
+@property (NS_NONATOMIC_IOSONLY, copy) NSString *hash;
 
 // Generating license data/files
 - (NSData*)licenseDataForDictionary:(NSDictionary *)dict;
@@ -65,7 +64,7 @@
 - (void)setBlacklist:(NSArray *)hashArray;
 
 // Error handling
-- (NSString *)getLastError;
+@property (NS_NONATOMIC_IOSONLY, getter=getLastError, readonly, copy) NSString *lastError;
 
 @end
 
